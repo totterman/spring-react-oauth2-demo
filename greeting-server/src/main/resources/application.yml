@@ -1,0 +1,35 @@
+issuer: http://localhost:8080/realms/demo
+
+server:
+  port: 8082
+  ssl:
+    enabled: false
+
+permit-all: >
+  /users/me,
+  /actuator/health/readiness,
+  /actuator/health/liveness
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${issuer}
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+
+---
+server:
+  ssl:
+    enabled: true
+
+spring:
+  config:
+    activate:
+      on-profile: ssl
