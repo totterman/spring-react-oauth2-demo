@@ -1,0 +1,20 @@
+{
+  "title": "Multilingual React frontend",
+  "greetings": "Greetings",
+  "admin": "Admin",
+  "signedin": "has signed in",
+  "login": "Login",
+  "logout": "Logout",
+  "error": "An error has occurred:",
+  "adminp": "Admin Panel",
+  "isadmin": "You should not come here often because I am lazy",
+  "noadmin": "You need Admin authorization to access this page",
+  "please": "Please login first.",
+  "welcome": "Welcome to React Frontend!",
+  "home1": "In this demo, the user is signed in by the OAuth2 protocol. Keycloak is used as the OAauth2 provider, and the backend consists of two Spring Boot services.",
+  "home2": "Moreover, the frontend is multilingual. Demo options are English, Finnish and Swedish. Signing in can be tried with credentials:",
+  "home3": "THe fronend is implemented in React and Typescript, and decorated with Tailwind CSS. React Hooks useContext, useEffect, useLoaderData and useReducer are put in use. Repeating HTML code is avoided with the style-functions Pagestyle, Warningstyle, and SectionStyle.",
+  "home4": "Test coverage is not complete.",
+  "list1": "username igor, password password - no authority",
+  "list2": "username brice, password password - admin"
+}

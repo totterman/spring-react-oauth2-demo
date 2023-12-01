@@ -1,0 +1,20 @@
+{
+  "title": "Flerspråkig React framsida",
+  "greetings": "Hälsningar",
+  "admin": "Administratör",
+  "signedin": "har loggat in",
+  "login": "Logga in",
+  "logout": "Logga ut",
+  "error": "Ett systemfel har inträffat:",
+  "adminp": "Administratörens panel",
+  "isadmin": "Kom inte ofta hit, sidan laddas bara vid behov",
+  "noadmin": "Du måste vara administratör för att komma till denna sida",
+  "please": "Logga in först.",
+  "welcome": "Välkommen till React framsida!",
+  "home1": "I detta demo loggar användaren in i systemet enligt OAuth2-protokollet. Som OAauth2-provider används Keycloak och som backend fungerar två Spring Boot -service.",
+  "home2": "Kirjautumisen lisäksi käyttöliittymä on monikielinen. Demossa on valittavana englanti, suomi ja ruotsi. Kirjautumista voi kokeilla:",
+  "home3": "Frontändan är utförd med React och Typescript, och utseendet med hjälp av Tailwind CSS. Av React Hooks används bla useContext, useEffect, useLoaderData och useReducer. Stil-funktionerna Pagestyle, Warningstyle och Sectionstyle minskar på behovet att upprepa HTML-kod.",
+  "home4": "Testerna är inte (ännu) helt täckande.",
+  "list1": "användarnamn igor, lösenord password - ej rättigheter",
+  "list2": "användarnamn brice, lösenord password - administratör"
+}

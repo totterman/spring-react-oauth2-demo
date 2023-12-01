@@ -1,0 +1,20 @@
+{
+  "title": "Monikielinen React selainpuoli",
+  "greetings": "Terveiset",
+  "admin": "Pääkäyttäjä",
+  "signedin": "on kirjautunut sisään",
+  "login": "Kirjaudu",
+  "logout": "Poistu",
+  "error": "On tapahtunut virhe:",
+  "adminp": "Pääkäyttäjän paneeli",
+  "isadmin": "Lataudun laiskasti joten älä käy usein",
+  "noadmin": "Vain pääkäyttäjä pääsee tälle sivulle",
+  "please": "Kirjaudu sisään ensin.",
+  "welcome": "Tervetuloa React selainpuolelle!",
+  "home1": "Tässä demossa käyttäjä kirjautuu järjestelmään OAuth2-protokollan mukaisesti. OAauth2-providerina käytetään Keycloakia ja taustajärjestelmänä on 2 Spring Boot -palvelua.",
+  "home2": "Kirjautumisen lisäksi käyttöliittymä on monikielinen. Demossa on valittavana englanti, suomi ja ruotsi. Kirjautumista voi kokeilla:",
+  "home3": "Käyttöliittymä on tehty Reactilla ja Typescriptillä, ja koristeltu Tailwind CSS:n avulla. React-Hookeista on käytössä mm useContext, useEffect, useLoaderData ja useReducer. Tyyli-funktioiden Pagestyle ja Warningstyle avulla HTML-koodin toistaminen on vähentynyt.",
+  "home4": "Testit eivät vielä ole kaiken kattavia.",
+  "list1": "tunnus igor, salasana password - ei oikeuksia",
+  "list2": "tunnus brice, salasana password - pääkäyttäjä"
+}
