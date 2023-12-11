@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greeting-server
+  labels:
+    app: greeting-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: greeting-server
+  template:
+    metadata:
+      labels:
+        app: greeting-server
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "9001"
+    spec:
+      containers:
+        - name: greeting-server
+          image: greeting-server
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command: [ "sh", "-c", "sleep 5" ]
+          ports:
+            - containerPort: 8482
+          env:
+            - name: BPL_JVM_THREAD_COUNT
+              value: "50"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9001
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          volumeMounts:
+            - name: greeting-config-volume
+              mountPath: /workspace/config
+      volumes:
+        - name: greeting-config-volume
+          configMap:
+            name: greeting-config

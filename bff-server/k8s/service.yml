@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bff-server
+  labels:
+    app: bff-server
+spec:
+  type: ClusterIP
+  selector:
+    app: bff-server
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8481

@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-keycloak
+  labels:
+    app: demo-keycloak
+spec:
+  selector:
+    matchLabels:
+      app: demo-keycloak
+  template:
+    metadata:
+      labels:
+        app: demo-keycloak
+    spec:
+      containers:
+        - name: demo-keycloak
+          image: quay.io/keycloak/keycloak:23.0
+          args:
+            - "start-dev"
+            - "--import-realm"
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: user
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: password
+            - name: KC_HTTPS_CERTIFICATE_FILE
+              value: /opt/keycloak/certs/keycloak-cert.pem
+            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
+              value: /opt/keycloak/certs/keycloak-key.pem
+          startupProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+            failureThreshold: 40
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 350Mi
+            limits:
+              cpu: 500m
+              memory: 750Mi
+          volumeMounts:
+            - name: demo-keycloak-config-volume
+              mountPath: /opt/keycloak/data/import
+            - name: demo-keycloak-keystore-volume
+              mountPath: /opt/keycloak/certs
+      volumes:
+        - name: demo-keycloak-config-volume
+          configMap:
+            name: demo-keycloak
+        - name: demo-keycloak-keystore-volume
+          hostPath:
+            path: /opt/keycloak/certs
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-keycloak
+  labels:
+    app: demo-keycloak
+spec:
+  type: ClusterIP
+  selector:
+    app: demo-keycloak
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 8443
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  labels:
+    app: demo-keycloak
+spec:
+  rules:
+    - host: demo-keycloak
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: demo-keycloak
+                port:
+                  number: 80
