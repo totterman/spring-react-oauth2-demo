@@ -13,22 +13,21 @@ resource-server-permit-all: >
   /login-options,
   /ui/**,
   /actuator/health/readiness,
-  /actuator/health/liveness,
-  /favicon.ico
-
+  /actuator/health/liveness
 server:
-  port: 8081
+  port: 8481
   ssl:
-    enabled: false
+    key-store: classpath:bff-server.p12
+    key-store-password: changeme
+    key-password: changeme
 
-scheme: http
-issuer: http://localhost:8080/realms/demo
-client-id: demo-client
-client-secret: demo-keycloak-secret
+scheme: https
+# issuer: http://keycloak.in.totterman.com:8080/realms/demo
+issuer: https://keycloak.in.totterman.com:8443/realms/demo
+client-id: spring-addons-confidential
+client-secret: CdDSXNtXxdyNJP8Ho6WKEI9CbSHAuyUm
 user-name-attribute: preferred_username
 gateway-uri: ${scheme}://localhost:${server.port}
-greetings-api-uri: ${scheme}://localhost:8082
-ui-uri: ${scheme}://localhost:3000
 
 spring:
   security:
@@ -66,28 +65,37 @@ spring:
             - Path=/
           filters:
             - RedirectTo=301,${gateway-uri}/ui/
+          #  - RedirectTo=301,${UI_URI:http://localhost:3000}
         # BFF access to greetings API (with TokenRelay replacing session cookies with access tokens)
         # To be used by SPAs (Angular app in our case)
         - id: greetings-api-bff
-          uri: ${greetings-api-uri}
+          uri: ${RESOURCE_URI:https://localhost:8482}
           predicates:
             - Path=/bff/v1/**
           filters:
             - TokenRelay=
             - StripPrefix=2
         - id: ui
-          uri: ${ui-uri}
+          uri: ${UI_URI:http://localhost:3000}
           predicates:
-            - Path=/ui/**,/api/live/ws
+            - Path=/ui/**
+          metadata:
+            cors:
+              allowedOrigins: ${UI_URI:http://localhost:3000}
+              allowedMethods:
+                - GET
+                - POST
 
 logging:
   level:
+    web: DEBUG
     org:
       springframework:
-        security: DEBUG
+        security: INFO
         boot: INFO
         cloud:
-          gateway: DEBUG
+          gateway:
+            filter: TRACE
 
 ---
 spring:

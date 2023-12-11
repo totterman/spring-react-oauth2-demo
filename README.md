@@ -10,9 +10,11 @@ My implementation uses two principal contexts for the app: one for the user logi
 So far, this seems to work out quite nicely.
 
 ### Running
+Directory `demo-deploy` contains some useful scripts. 
+
 There is a Docker-compose file for Keycloak to be run as a Docker container.
 Keycloak reads in its configuration at startup from `realm-config.json` which of course can be tweaked according to the actual needs.
-TLS certificates are left out from this initial stage demo.
+All connections are HTTPS which requires valid certificates for each service. 
 Leave a few seconds for Keycloak to start before starting the Spring Boot services and the frontend.
 
 Ports:
@@ -21,3 +23,4 @@ Ports:
 - 8082: Resource server
 
 The frontend uses the Gateway server as proxy and is accessible from `localhost:8081/ui`
+

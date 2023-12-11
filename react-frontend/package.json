@@ -21,8 +21,15 @@
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
+  "options": {
+    "allowedHosts": [
+      "localhost",
+      ".localhost",
+      "keycloak",
+      "keycloak.in.totterman.com"
+    ]
+  },
   "proxy": "http://127.0.0.1:8081",
-  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

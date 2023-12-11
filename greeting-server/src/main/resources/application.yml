@@ -1,9 +1,13 @@
-issuer: http://localhost:8080/realms/demo
+issuer: https://keycloak.in.totterman.com:8443/realms/demo
+#issuer: http://localhost:8080/realms/demo
 
 server:
-  port: 8082
+  # port: 8082
+  port: 8482
   ssl:
-    enabled: false
+    key-store: classpath:greeting-server.p12
+    key-store-password: changeme
+    key-password: changeme
 
 permit-all: >
   /users/me,
@@ -21,13 +25,15 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
-
+        security:
+          web: DEBUG
+          oauth2: TRACE
+        web: DEBUG
 
 ---
 server:
   ssl:
-    enabled: true
+    enabled: false
 
 spring:
   config:

@@ -1,0 +1,84 @@
+services:
+
+  bff-server:
+    image: "bff-server"
+    container_name: "bff-server"
+    depends_on:
+      - greeting-server
+      - react-frontend
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 8481:8481
+    volumes:
+      - ./certs:/etc/ssl/keystore
+    environment:
+      - SERVER_SSL_PORT=8481
+      - SERVER_SSL_KEY_STORE=/etc/ssl/keystore/bff-server.p12
+      - SERVER_SSL_KEY_PASSWORD=changeit
+      - SERVER_SSL_KEY_STORE_PASSWORD=changeit
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=https://keycloak.in.totterman.com:8443/realms/demo
+      - RESOURCE_URI=https://greeting-server:8482
+      - UI_URI=https://react-frontend:8083
+    networks:
+      - spring-net
+
+  react-frontend:
+    image: "react-frontend"
+    container_name: "react-frontend"
+    depends_on:
+      - demo-keycloak
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 8083:8083
+    volumes:
+      - ./certs:/etc/ssl/keystore
+    environment:
+      - PORT=8083
+    networks:
+      - spring-net
+
+  greeting-server:
+    image: "greeting-server"
+    container_name: "greeting-server"
+    depends_on:
+      - demo-keycloak
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - 8482:8482
+    volumes:
+      - ./certs:/etc/ssl/keystore
+    environment:
+      - SERVER_SSL_PORT=8482
+      - SERVER_SSL_KEY_STORE=/etc/ssl/keystore/greeting-server.p12
+      - SERVER_SSL_KEY_PASSWORD=changeit
+      - SERVER_SSL_KEY_STORE_PASSWORD=changeit
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=https://keycloak.in.totterman.com:8443/realms/demo
+    networks:
+      - spring-net
+
+  demo-keycloak:
+    image: quay.io/keycloak/keycloak:22.0.5
+    container_name: "demo-keycloak"
+    command: start-dev --import-realm --log-level="DEBUG"
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
+      - ./certs:/opt/keycloak/certs
+    environment:
+      - KEYCLOAK_ADMIN=user
+      - KEYCLOAK_ADMIN_PASSWORD=password
+      - KC_HTTPS_CERTIFICATE_FILE=/opt/keycloak/certs/keycloak-cert.pem
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/opt/keycloak/certs/keycloak-key.pem
+    ports:
+      - 8080:8080
+      - 8443:8443
+    networks:
+      keycloak-net:
+        aliases:
+          - keycloak.in.totterman.com
+
+networks:
+  spring-net: {}
+  keycloak-net: {}

@@ -46,8 +46,10 @@ dependencyManagement {
 
 bootBuildImage {
 	imageName = "${project.name}"
-	environment = ["BP_JVM_VERSION": "17.*"]
-
+	environment = ["BP_JVM_VERSION": "17.*", "BP_EMBED_CERTS": "true"]
+	bindings = [
+			"$rootDir/bindings/certificates:/platform/bindings/ca-certificates"
+	]
 	docker {
 		publishRegistry {
 			username = project.findProperty("registryUsername")
